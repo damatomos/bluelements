@@ -1,0 +1,47 @@
+
+/* ------------------- INPUT BOX ----------------- */
+
+.input_box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.input_box__label
+{
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-darkblue);
+  transition: 0.2s;
+  user-select: none;
+}
+
+.input_box[data-error="true"] > input,
+.input_box[data-error="true"] > .custom_select,
+.input_box[data-error="true"] > .custom_grid_list {
+  box-shadow: 0px 0px 0px 1px var(--color-red);
+}
+
+.input_box[data-error="true"] > .input:focus-within,
+.input_box[data-error="true"] > .custom_select[data-active="true"],
+.input_box[data-error="true"] > .custom_grid_list:focus-within {
+  box-shadow: 0px 0px 0px 1px var(--color-red);
+}
+
+.input_box[data-error="true"] .input_box__error {
+  display: block;
+}
+
+.input_box__error {
+  display: none;
+  font-size: 14px;
+  color: red;
+}
+
+.input_box__error::before {
+  content: '🔺';
+}
+
+/* ------------------- END INPUT BOX ----------------- */

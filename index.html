@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Bluelements</title>
+    <link rel="stylesheet" href="./src/css/reset.css" />
+    <link rel="stylesheet" href="./src/css/buttons.css" />
+    <link rel="stylesheet" href="./src/css/commons.css" />
+    <link rel="stylesheet" href="./src/css/input.css" />
+    <link rel="stylesheet" href="./src/css/select.css" />
+    <link rel="stylesheet" href="./src/css/input_box.css" />
+    <script src="./src/js/select.js" defer></script>
+
+    <style>
+      body {
+        padding: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Titles -->
+    <h1>Title 1</h1>
+    <h2>Title 2</h2>
+    <h3>Title 3</h3>
+    <h4>Title 4</h4>
+    <h5>Title 5</h5>
+    <h6>Title 6</h6>
+    <!-- End Titles -->
+    <div class="divider"></div>
+    <!-- Buttons -->
+    <button class="button --small">Button SMALL</button>
+    <button class="button">Default Button</button>
+    <button class="button --large">Large BUUUUTTTOOONNN</button>
+
+    <button class="button --secondary">Default Button</button>
+    <!-- End Buttons -->
+    <div class="divider"></div>
+    <!-- Inputs -->
+    <input type="text" class="input" placeholder="Anywhere" value="Batata" />
+    <input
+      type="text"
+      class="input --large"
+      placeholder="Anywhere"
+      value="Batata"
+    />
+    <!-- End Inputs -->
+    <div class="divider"></div>
+    <!-- Select -->
+    <div class="input_box">
+      <div class="custom_select" id="perfilSelect">
+        <label for="perfil" class="input_box__label">Perfil</label>
+        <div class="custom_select__button">
+          <input type="checkbox" class="custom_select_sensor" />
+          <span class="custom_select__selected">Selecione o perfil</span>
+        </div>
+        <ul class="custom_select__option_list">
+          <li class="custom_select__option">
+            <input
+              type="radio"
+              name="perfil"
+              value="organizador"
+              data-label="Organizador"
+            />
+            <span>Organizador</span>
+          </li>
+          <li class="custom_select__option">
+            <input
+              type="radio"
+              name="perfil"
+              value="bilheteiro"
+              data-label="Bilheteiro"
+            />
+            <span>Bilheteiro</span>
+          </li>
+          <li class="custom_select__option">
+            <input
+              type="radio"
+              name="perfil"
+              value="dono_de_casa"
+              data-label="Dono de casa"
+            />
+            <span>Dono de casa</span>
+          </li>
+        </ul>
+      </div>
+      <p class="input_box__error">O Perfil é obrigatório.</p>
+    </div>
+
+    <div class="input_box"></div>
+      <div class="custom_select" id="perfilSelect2">
+        <label for="perfil" class="input_box__label">Perfil 2</label>
+        <div class="custom_select__button">
+          <input type="checkbox" class="custom_select_sensor" checked />
+          <span class="custom_select__selected">Selecione o perfil</span>
+        </div>
+        <ul class="custom_select__option_list">
+          <li class="custom_select__search">
+            <label for="search_perfil" class="search_with_icon">
+              <input type="search" id="search_perfil">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
+            </label>
+          </li>
+          <li class="custom_select__option">
+            <input
+              type="radio"
+              name="perfil2"
+              value="organizador"
+              data-label="Organizador"
+            />
+            <span>Organizador</span>
+          </li>
+          <li class="custom_select__option">
+            <input
+              type="radio"
+              name="perfil2"
+              value="bilheteiro"
+              data-label="Bilheteiro"
+            />
+            <span>Bilheteiro</span>
+          </li>
+          <li class="custom_select__option">
+            <input
+              type="radio"
+              name="perfil2"
+              value="dono_de_casa"
+              data-label="Dono de casa"
+            />
+            <span>Dono de casa</span>
+          </li>
+        </ul>
+      </div>
+      <p class="input_box__error">O Perfil é obrigatório.</p>
+    </div>
+    <!-- End Select -->
+    <div class="divider"></div>
+  </body>
+</html>

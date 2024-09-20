@@ -1,0 +1,159 @@
+/* --------- Custom Select --------- */
+.custom_select {
+  width: 100%;
+  max-width: 400px;
+
+  position: relative;
+}
+
+/* --------- Custom Select Button --------- */
+.custom_select__button {
+  width: 100%;
+
+  background-color: white;
+  padding: 1rem;
+  border-radius: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  border: 1px solid var(--color-bg-gray);
+  cursor: pointer;
+}
+
+.custom_select__button:hover,
+.custom_select__button:has(input:focus) {
+  border: 1px solid var(--color-bg-blue);
+}
+
+.custom_select__button::after {
+  position: absolute;
+  content: "";
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+
+  clip-path: polygon(50% 50%, 0 100%, 100% 100%);
+
+  background-color: black;
+
+  transition: 0.3s;
+}
+
+.custom_select__button:has(input:checked)::after {
+  top: calc(50% + 6px);
+  clip-path: polygon(50% 50%, 0 0, 100% 0);
+}
+
+/* --------- Custom Select Sensor (Checkbox) --------- */
+.custom_select_sensor {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  /* border: 1px solid red; */
+}
+
+/* --------- Custom Select Selected Item --------- */
+.custom_select__selected {
+  font-weight: 500;
+  user-select: none;
+}
+
+/* --------- Custom Select Options --------- */
+.custom_select__option_list {
+  display: none;
+
+  /* border: 1px solid red; */
+  width: 100%;
+
+  position: absolute;
+  margin-top: 0.375rem;
+
+  padding: 0.5rem;
+  border-radius: 6px;
+  background-color: white;
+  border: 1px solid var(--color-bg-blue);
+  z-index: 10;
+}
+
+.custom_select__button:has(input:checked) ~ .custom_select__option_list {
+  display: block;
+}
+
+.custom_select__option {
+  width: 100%;
+  /* border: 1px solid blue; */
+  padding: 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  margin-top: 0.375rem;
+  user-select: none;
+}
+
+.custom_select__option:first-child {
+  margin-top: 0;
+}
+
+.custom_select__option:hover {
+  background-color: var(--color-bg-gray-200);
+}
+
+.custom_select__option > input[type="radio"] {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  /* border: 1px solid green; */
+}
+
+.custom_select__option:has(input[type="radio"]:checked) {
+  background-color: var(--color-bg-gray-200);
+}
+
+.custom_select__option:has(input[type="radio"]:checked)::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background-color: var(--color-bg-blue-100);
+  border-radius: 50%;
+
+  width: 16px;
+  height: 16px;
+}
+
+/* Custom Select Search */
+
+.custom_select__search input[type="search"] {
+  flex: 1;
+  width: 100%;
+}
+
+.search_with_icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 6px;
+  border: 1px solid var(--color-bg-blue-100);
+  padding: 0.5rem 1rem;
+}
+
+.search_with_icon:has(input:focus) svg {
+  fill: var(--color-bg-blue)
+}
+
+.custom_select__search .search_with_icon svg {
+  transition: 0.3s;
+  width: 24px;
+  height: 24px;
+  fill: var(--color-bg-gray-900);
+}

@@ -1,0 +1,26 @@
+.input
+{
+  --ipt-border-shadow: 0 0 0px 1px var(--color-bg-gray-900);
+  --ipt-f-size: 16px;
+
+  display: block;
+  width: 100%;
+  background-color: white;
+  
+  box-shadow: var(--ipt-border-shadow);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: 0.24s;
+  font-size: var(--ipt-f-size);
+  margin: 6px 0;
+}
+
+.input.--large
+{
+  font-size: calc(var(--ipt-f-size) * 1.2);
+}
+
+.input:hover, .input:focus
+{
+  --ipt-border-shadow: 0 0 0 2px var(--color-bg-blue);
+}

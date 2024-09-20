@@ -1,0 +1,52 @@
+.button {
+  --btn-bg-color: var(--color-bg-blue);
+  --btn-radius: 30px;
+  --btn-h-padding: 0.5rem;
+  --btn-v-padding: 1rem;
+  --btn-f-weight: 600;
+  --btn-color: white;
+  --btn-f-size: 16px;
+
+  padding: var(--btn-h-padding) var(--btn-v-padding);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: 0.24s;
+  font-weight: var(--btn-f-weight);
+  background-color: var(--btn-bg-color, #1e538d);
+  color: var(--btn-color);
+  text-align: center;
+  font-size: var(--btn-f-size);
+}
+
+.button:hover
+{
+  --btn-bg-color: var(--color-bg-blue-100);
+}
+
+.button:active
+{
+  --btn-bg-color: var(--color-bg-blue-900);
+}
+
+.button.--small
+{
+  --btn-f-size: calc(16px * 0.8);
+}
+
+.button.--large
+{
+  --btn-f-size: calc(16px * 1.2);
+}
+
+.button.--secondary
+{
+  --btn-bg-color: var(--color-bg-green);
+}
+.button.--secondary:hover
+{
+  --btn-bg-color: var(--color-bg-green-100);
+}
+.button.--secondary:active
+{
+  --btn-bg-color: var(--color-bg-green-900);
+}
