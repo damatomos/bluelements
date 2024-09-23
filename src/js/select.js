@@ -127,6 +127,7 @@ class CustomSelectAdapter {
     this._getOptionInputList().forEach((option) =>
       CustomSelectAdapter.defineOption(this.select, option)
     );
+    this._getInputPreview().style.display = "none";
   }
 
   _selectButtonActions() {
@@ -206,6 +207,12 @@ class CustomSelectAdapter {
       this._updatePreview(e.target.value);
       let optionInputList = this._getOptionInputList();
 
+      if (inputQuery.value.length > 0) {
+        this._getInputPreview().style.display = "";
+      } else {
+        this._getInputPreview().style.display = "none";
+      }
+
       optionInputList.forEach((option) => {
         if (
           !option.dataset.label
@@ -227,6 +234,8 @@ class CustomSelectAdapter {
         select.classList.toggle("open");
       }
       select.querySelector(".custom_select__button input").checked = false;
+      select.querySelector(".custom_select__preview span").textContent = "";
+      select.querySelector(".custom_select__preview").style.display = "none";
       CustomSelectAdapter.showAllSelectOptions(select);
     }
   }
@@ -296,16 +305,13 @@ class CustomSelectAdapter {
     }
   }
 
-  static copyAndRemoveAllOptions(select = null)
-  {
+  static copyAndRemoveAllOptions(select = null) {
     const nodeList = [];
     if (select && select.classList.contains("custom_select")) {
-      select
-        .querySelectorAll(".custom_select__option")
-        .forEach((e) => {
-          nodeList.push(e.cloneNode(true));
-          e.remove();
-        });
+      select.querySelectorAll(".custom_select__option").forEach((e) => {
+        nodeList.push(e.cloneNode(true));
+        e.remove();
+      });
     }
     return nodeList;
   }
@@ -361,13 +367,19 @@ CustomSelectAdapter.addOption(document.querySelector("#perfilSelect2"), {
   value: "caramujo",
 });
 
+const nodeList = CustomSelectAdapter.copyAndRemoveAllOptions(
+  document.querySelector("#perfilSelect2")
+);
 
-
-const nodeList = CustomSelectAdapter.copyAndRemoveAllOptions(document.querySelector("#perfilSelect2"));
-
-// nodeList.forEach((n) => {
-//   document.querySelector('#perfilSelect2 .custom_select__option_list').appendChild(n);
-// })
+nodeList.forEach((n) => {
+  document
+    .querySelector("#perfilSelect2 .custom_select__option_list")
+    .appendChild(n);
+  CustomSelectAdapter.defineOption(
+    document.querySelector("#perfilSelect2"),
+    n.querySelector("input")
+  );
+});
 
 function newPerfil(e) {
   const select = getParentByClass(e.target, "custom_select");
