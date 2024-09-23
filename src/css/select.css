@@ -157,3 +157,40 @@
   height: 24px;
   fill: var(--color-bg-gray-900);
 }
+
+.custom_select__preview
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.375rem;
+
+  background-color: var(--color-bg-gray-100);
+  border: 1px solid var(--color-bg-gray-200);
+  box-shadow: 2px 2px 2px 0px var(--color-bg-gray-200);
+
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+
+  transition: 0.24s;
+
+  display: none;
+}
+
+.custom_select__search:has(input[type="search"]) ~ .custom_select__preview
+{
+  display: flex;
+}
+
+.custom_select__preview:hover
+{
+  background-color: var(--color-bg-gray-200);
+}
+
+.custom_select__preview > h4
+{
+  font-weight: 700;
+  color: var(--color-bg-gray-900);
+}

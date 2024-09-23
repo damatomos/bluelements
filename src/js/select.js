@@ -92,58 +92,99 @@ class CustomSelectAdapter {
     if (!select && select.classList.contains("custom_select"))
       throw Error("Select not found!");
     this.select = select;
-
-    this.selectedValue = select.querySelector(".custom_select__selected");
-    this.selectButtonInput = select.querySelector(
-      ".custom_select__button input"
-    );
-    this.optionInputList = select.querySelectorAll(
-      ".custom_select__option input"
-    );
-
-    this.inputQuery = select.querySelector(
-      `.custom_select__search input[type="search"]`
-    );
-
+    this.selectId = select.id;
     this._init();
+  }
+
+  _getInputPreview() {
+    return document.querySelector(`#${this.selectId} .custom_select__preview`);
+  }
+
+  _getInputQuery() {
+    return document.querySelector(
+      `#${this.selectId} .custom_select__search input[type="search"]`
+    );
+  }
+
+  _getOptionInputList() {
+    return document.querySelectorAll(
+      `#${this.selectId} .custom_select__option input`
+    );
+  }
+  _getSelectedValue() {
+    return document.querySelector(`#${this.selectId} .custom_select__selected`);
+  }
+
+  _getSelectButtonInput() {
+    return document.querySelector(
+      `#${this.selectId} .custom_select__button input`
+    );
   }
 
   _init() {
     this._selectButtonActions();
     this.filterByInput();
-    this.optionInputList.forEach((option) => this._defineOption(option));
+    this._getOptionInputList().forEach((option) =>
+      CustomSelectAdapter.defineOption(this.select, option)
+    );
   }
 
   _selectButtonActions() {
-    this.selectButtonInput.addEventListener("change", (e) => {
-      CustomSelectAdapter.closeAllOpenSelects(getParentByClass(e.target, "custom_select"));
+    let selectButtonInput = this._getSelectButtonInput();
+    selectButtonInput.addEventListener("change", (e) => {
+      let inputQuery = this._getInputQuery();
+
+      if (selectButtonInput.checked) {
+        let currentSelected = this._getCurrentOptionSelected();
+        if (currentSelected) {
+          currentSelected.scrollIntoView();
+        } else if (inputQuery) {
+          inputQuery.focus();
+          inputQuery.scrollIntoView();
+        }
+      }
+
+      CustomSelectAdapter.closeAllOpenSelects(
+        getParentByClass(e.target, "custom_select")
+      );
     });
 
-    this.selectButtonInput.addEventListener("input", () => {
+    selectButtonInput.addEventListener("input", () => {
       this.select.classList.toggle("open");
 
       if (!this.select.classList.contains("open")) return;
 
       const input =
-        this.select.querySelector(".custom_select__option input:checked") ||
+        this._getCurrentOptionSelected() ||
         this.select.querySelector(".custom_select__option input");
 
-      input.focus();
+      if (input) input.focus();
     });
   }
 
-  _defineOption(optionEl = null) {
+  _getCurrentOptionSelected() {
+    return document.querySelector(".custom_select__option input:checked");
+  }
+
+  static defineOption(select = null, optionEl = null) {
     if (!optionEl) throw Error("Option element not found.");
+    if (!select && !select.classList.contains("custom_select"))
+      throw Error("Select element not found");
+
+    let selectedValue = select.querySelector(".custom_select__selected");
+    let selectButtonInput = select.querySelector(
+      ".custom_select__button input"
+    );
 
     optionEl.addEventListener("click", (event) => {
-      this.selectedValue.textContent = optionEl.dataset.label;
+      selectedValue.textContent = optionEl.dataset.label;
 
       const isMouseOrTouch =
         event.pointerType === "mouse" || event.pointerType === "touch";
 
-      isMouseOrTouch && this.selectButtonInput.click();
+      isMouseOrTouch && selectButtonInput.click();
 
-      CustomSelectAdapter.showAllSelectOptions(this.select);
+      CustomSelectAdapter.showAllSelectOptions(select);
     });
 
     if (optionEl.checked) {
@@ -151,14 +192,25 @@ class CustomSelectAdapter {
     }
   }
 
+  _updatePreview(value) {
+    let inputPreview = this._getInputPreview();
+    if (inputPreview) {
+      inputPreview.querySelector("span").textContent = value;
+    }
+  }
+
   filterByInput() {
-    if (!this.inputQuery) return;
-    this.inputQuery.addEventListener("input", () => {
-      this.optionInputList.forEach((option) => {
+    let inputQuery = this._getInputQuery();
+    if (!inputQuery) return;
+    inputQuery.addEventListener("input", (e) => {
+      this._updatePreview(e.target.value);
+      let optionInputList = this._getOptionInputList();
+
+      optionInputList.forEach((option) => {
         if (
           !option.dataset.label
             .toLowerCase()
-            .includes(this.inputQuery.value.toLowerCase()) &&
+            .includes(inputQuery.value.toLowerCase()) &&
           !option.checked
         ) {
           option.parentNode.style.display = "none"; // hide element
@@ -169,16 +221,22 @@ class CustomSelectAdapter {
     });
   }
 
+  static close(select = null) {
+    if (select && select.classList.contains("custom_select")) {
+      if (select.classList.contains("open")) {
+        select.classList.toggle("open");
+      }
+      select.querySelector(".custom_select__button input").checked = false;
+      CustomSelectAdapter.showAllSelectOptions(select);
+    }
+  }
+
   static closeAllOpenSelects(parent = null) {
     const openSelects = document.querySelectorAll(".custom_select");
 
     for (let select of openSelects) {
       if (select != parent) {
-        if (select.classList.contains("open")) {
-          select.classList.toggle("open");
-        }
-        select.querySelector(".custom_select__button input").checked = false;
-        CustomSelectAdapter.showAllSelectOptions(select);
+        CustomSelectAdapter.close(select);
       }
     }
   }
@@ -196,8 +254,63 @@ class CustomSelectAdapter {
     });
   }
 
+  static addOption(select = null, { name, value, label, labelView = null }) {
+    if (select && select.classList.contains("custom_select")) {
+      const optionEl = document.createElement("li");
+      optionEl.classList.add("custom_select__option");
+      optionEl.innerHTML = `
+        <input
+            type="radio"
+            name="${name}"
+            value="${value}"
+            data-label="${label}"
+        />
+        <span>${labelView || label}</span>
+      `;
+
+      CustomSelectAdapter.defineOption(
+        select,
+        optionEl.querySelector(`input[type="radio"]`)
+      );
+      select.querySelector(".custom_select__option_list").appendChild(optionEl);
+
+      return optionEl;
+    }
+  }
+
+  static removeOptionByValue(select = null, value) {
+    if (select && select.classList.contains("custom_select")) {
+      select
+        .querySelectorAll(
+          `.custom_select__option input[type="radio"][value="${value}"]`
+        )
+        .forEach((e) => e.parentNode.remove());
+    }
+  }
+
+  static removeAllOptions(select = null) {
+    if (select && select.classList.contains("custom_select")) {
+      select
+        .querySelectorAll(".custom_select__option")
+        .forEach((e) => e.remove());
+    }
+  }
+
+  static copyAndRemoveAllOptions(select = null)
+  {
+    const nodeList = [];
+    if (select && select.classList.contains("custom_select")) {
+      select
+        .querySelectorAll(".custom_select__option")
+        .forEach((e) => {
+          nodeList.push(e.cloneNode(true));
+          e.remove();
+        });
+    }
+    return nodeList;
+  }
+
   static defineKeyboardSelect() {
-    console.log("define key")
     window.addEventListener("keydown", (e) => {
       if (e.target.parentNode.classList.contains("custom_select__option")) {
         const customSelect = getParentByClass(e.target, "custom_select");
@@ -214,8 +327,7 @@ class CustomSelectAdapter {
     });
   }
 
-  static closeSelectWhenToClickOutside()
-  {
+  static closeSelectWhenToClickOutside() {
     document.addEventListener("click", function (event) {
       if (!event.target.closest(".custom_select")) {
         CustomSelectAdapter.closeAllOpenSelects();
@@ -223,14 +335,13 @@ class CustomSelectAdapter {
     });
   }
 
-  static initiliazeConfigs()
-  {
-    document.querySelectorAll('.custom_select').forEach((select) => new CustomSelectAdapter(select));
+  static initiliazeConfigs() {
+    document
+      .querySelectorAll(".custom_select")
+      .forEach((select) => new CustomSelectAdapter(select));
   }
 
-  static enable()
-  {
-    console.log("enable")
+  static enable() {
     CustomSelectAdapter.initiliazeConfigs();
     CustomSelectAdapter.defineKeyboardSelect();
     CustomSelectAdapter.closeSelectWhenToClickOutside();
@@ -238,3 +349,38 @@ class CustomSelectAdapter {
 }
 
 CustomSelectAdapter.enable();
+
+// CustomSelectAdapter.removeOptionByValue(
+//   document.querySelector("#perfilSelect2"),
+//   "organizador"
+// );
+
+CustomSelectAdapter.addOption(document.querySelector("#perfilSelect2"), {
+  name: "perfil2",
+  label: "Caramujo",
+  value: "caramujo",
+});
+
+
+
+const nodeList = CustomSelectAdapter.copyAndRemoveAllOptions(document.querySelector("#perfilSelect2"));
+
+// nodeList.forEach((n) => {
+//   document.querySelector('#perfilSelect2 .custom_select__option_list').appendChild(n);
+// })
+
+function newPerfil(e) {
+  const select = getParentByClass(e.target, "custom_select");
+  let content = e.target.querySelector("span").textContent;
+
+  const optionEl = CustomSelectAdapter.addOption(select, {
+    name: select.querySelector('.custom_select__option input[type="radio"]')
+      .name,
+    value: content.toLowerCase(),
+    label: content,
+  });
+
+  optionEl.querySelector('input[type="radio"]').click();
+
+  CustomSelectAdapter.close(select);
+}
